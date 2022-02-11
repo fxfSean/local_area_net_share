@@ -20,7 +20,8 @@ class _ChatScreenState extends State<ChatScreen> {
     return ChangeNotifierProvider(
       create: (context) => ChatModel(),
       child: Consumer<ChatModel>(
-        builder: (context, model, child) {
+        builder: (context, model, _) {
+          print('build--');
           return Scaffold(
             appBar: AppBar(
               title: Text(widget.deviceName),
@@ -29,7 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                     child: ListView.builder(
-                        itemCount: 10,
+                        itemCount: model.messageItems.length,
                         itemBuilder: (context, index) {
                           if (model.messageItems[index].userType == ChatUserType.other) {
                             return _LeftItem();
@@ -51,8 +52,26 @@ class _ChatScreenState extends State<ChatScreen> {
 class _LeftItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Left'),
+    return Flex(
+      direction: Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.7
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(0xfffde1e1),
+            ),
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white
+          ),
+          child: Text('Left'),
+        ),
+      ],
     );
   }
 }
@@ -60,8 +79,26 @@ class _LeftItem extends StatelessWidget {
 class _RightItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('Right'),
+    return Flex(
+      direction: Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.7
+          ),
+          margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              border: Border.all(
+                color: Color(0xfffde1e1),
+              ),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.lightGreen
+          ),
+          child: Text('Right'),
+        ),
+      ],
     );
   }
 }

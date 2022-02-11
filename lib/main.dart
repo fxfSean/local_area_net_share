@@ -59,7 +59,9 @@ class _HomeWidgetState extends State<_HomeWidget> {
               },
             ),
             TextButton(onPressed: () {
-            }, child: Text('Send Data')
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) =>
+                  ChatScreen(deviceName: 'Chat')));
+            }, child: Text('Go Chat')
             ),
             Expanded(child: ListView.separated(
                 itemBuilder: (context, index) {

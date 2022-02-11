@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:all_platform_demo/broadcast_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -6,10 +8,16 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
 
   BroadcastManager _broadcastManager = BroadcastManager();
   List<MessageItem> messageItems = [];
+  Timer? _timer;
 
   ChatModel() {
     initMessageItems();
     _broadcastManager.setOnDeviceStatusListener(this);
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      messageItems.add(MessageItem(ChatUserType.self, 'content-timer'));
+      print('count --');
+      notifyListeners();
+    });
   }
 
   void initMessageItems() {
@@ -26,6 +34,12 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
   void sendMessage(String data) {
     messageItems.add(MessageItem(ChatUserType.self, data));
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
