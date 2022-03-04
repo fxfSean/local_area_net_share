@@ -29,16 +29,29 @@ class _ChatScreenState extends State<ChatScreen> {
             body: Column(
               children: [
                 Expanded(
-                    child: ListView.builder(
-                        controller: model.scrollController,
-                        itemCount: model.messageItems.length,
-                        itemBuilder: (context, index) {
-                          if (model.messageItems[index].userType == ChatUserType.other) {
-                            return _LeftItem();
-                          } else  {
-                            return _RightItem();
+                    child: GestureDetector(
+                      onPanDown: (e) {
+                        model.fingerAttached = true;
+                      },
+                      child: NotificationListener(
+                        onNotification: (n) {
+                          if (n is ScrollEndNotification) {
+                            model.fingerAttached = false;
                           }
-                        })
+                          return false;
+                        },
+                        child: ListView.builder(
+                            controller: model.scrollController,
+                            itemCount: model.messageItems.length,
+                            itemBuilder: (context, index) {
+                              if (model.messageItems[index].userType == ChatUserType.other) {
+                                return _LeftItem();
+                              } else  {
+                                return _RightItem();
+                              }
+                            }),
+                      ),
+                    )
                 ),
 
               ],

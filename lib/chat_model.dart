@@ -17,12 +17,19 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
     _broadcastManager.setOnDeviceStatusListener(this);
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       messageItems.add(MessageItem(ChatUserType.self, 'content-timer'));
-      scrollController.animateTo(scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 500),
-          curve: Curves.ease);
-      print('count --');
+      if (!_fingerAttached) {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.ease);
+      }
+      print('count --$_fingerAttached');
       notifyListeners();
     });
+  }
+
+  bool _fingerAttached = false;
+  set fingerAttached(bool fingerAttached) {
+    _fingerAttached = fingerAttached;
   }
 
   void initMessageItems() {
