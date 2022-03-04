@@ -10,11 +10,16 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
   List<MessageItem> messageItems = [];
   Timer? _timer;
 
+  var scrollController = ScrollController();
+
   ChatModel() {
     initMessageItems();
     _broadcastManager.setOnDeviceStatusListener(this);
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       messageItems.add(MessageItem(ChatUserType.self, 'content-timer'));
+      scrollController.animateTo(scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.ease);
       print('count --');
       notifyListeners();
     });

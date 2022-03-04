@@ -30,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                     child: ListView.builder(
+                        controller: model.scrollController,
                         itemCount: model.messageItems.length,
                         itemBuilder: (context, index) {
                           if (model.messageItems[index].userType == ChatUserType.other) {
