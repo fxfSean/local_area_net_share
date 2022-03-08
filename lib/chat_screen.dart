@@ -34,6 +34,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       onPanDown: (e) {
                         model.fingerAttached = true;
                       },
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
                       child: NotificationListener(
                         onNotification: (n) {
                           if (n is ScrollEndNotification) {
@@ -41,17 +44,23 @@ class _ChatScreenState extends State<ChatScreen> {
                           }
                           return false;
                         },
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            controller: model.scrollController,
-                            itemCount: model.messageItems.length,
-                            itemBuilder: (context, index) {
-                              if (model.messageItems[index].userType == ChatUserType.other) {
-                                return _LeftItem();
-                              } else  {
-                                return _RightItem();
-                              }
-                            }),
+                        child: Container(
+                          padding: EdgeInsets.only(
+                            bottom: 10
+                          ),
+                          child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              controller: model.scrollController,
+                              itemCount: model.messageItems.length,
+                              itemBuilder: (context, index) {
+                                if (model.messageItems[index].userType == ChatUserType.other) {
+                                  return _LeftItem(text: model.messageItems[index].content,);
+                                } else  {
+                                  return _RightItem(text: model.messageItems[index].content,);
+                                }
+                              }),
+                        ),
                       ),
                     )
                 ),
@@ -66,6 +75,10 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class _LeftItem extends StatelessWidget {
+  final String text;
+
+  const _LeftItem({Key? key, required this.text}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Flex(
@@ -85,7 +98,7 @@ class _LeftItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(5),
             color: Colors.white
           ),
-          child: Text('Left'),
+          child: Text(text),
         ),
       ],
     );
@@ -93,6 +106,10 @@ class _LeftItem extends StatelessWidget {
 }
 
 class _RightItem extends StatelessWidget {
+  final String text;
+
+  const _RightItem({Key? key, required this.text}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Flex(
@@ -112,7 +129,7 @@ class _RightItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               color: Colors.lightGreen
           ),
-          child: Text('Right'),
+          child: Text(text),
         ),
       ],
     );

@@ -15,16 +15,7 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
   ChatModel() {
     initMessageItems();
     _broadcastManager.setOnDeviceStatusListener(this);
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      messageItems.add(MessageItem(ChatUserType.self, 'content-timer'));
-      if (!_fingerAttached) {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 500),
-            curve: Curves.ease);
-      }
-      print('count --$_fingerAttached');
-      notifyListeners();
-    });
+
   }
 
   bool _fingerAttached = false;
@@ -32,19 +23,31 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
     _fingerAttached = fingerAttached;
   }
 
-  void initMessageItems() {
-    for (var i = 0; i < 20; i++) {
-      if (i % 2 == 0) {
-        messageItems.add(MessageItem(ChatUserType.self, 'content $i'));
-      } else {
-        messageItems.add(MessageItem(ChatUserType.other, 'content $i'));
+  Future<void> initMessageItems() async {
+    bool flag = false;
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) async {
+      flag = !flag;
+      messageItems.add(MessageItem(flag ? ChatUserType.self : ChatUserType.other, 'content-timer'));
+      if (!_fingerAttached) {
+        scrollToBottom();
       }
-    }
+      notifyListeners();
+    });
     notifyListeners();
+  }
+
+  void scrollToBottom() {
+    Timer(Duration(milliseconds: 500), () {
+      scrollController.animateTo(scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.ease
+          );
+    });
   }
 
   void sendMessage(String data) {
     messageItems.add(MessageItem(ChatUserType.self, data));
+    scrollToBottom();
     notifyListeners();
   }
 
