@@ -1,7 +1,9 @@
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:all_platform_demo/broadcast_manager.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class ChatModel extends ChangeNotifier with DeviceStatusListener{
@@ -49,6 +51,17 @@ class ChatModel extends ChangeNotifier with DeviceStatusListener{
     messageItems.add(MessageItem(ChatUserType.self, data));
     scrollToBottom();
     notifyListeners();
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+    if (result != null) {
+      List<File> files = result.paths.map((path) => File(path!)).toList();
+      print(files);
+    } else {
+      // User canceled the picker
+    }
   }
 
   @override

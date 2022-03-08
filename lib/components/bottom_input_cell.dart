@@ -1,4 +1,7 @@
 
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +29,17 @@ class _BottomInputCellState extends State<BottomInputCell> {
       height: 50,
       child: Row(
         children: [
+          GestureDetector(
+            onTap: () async {
+              context.read<ChatModel>().pickFile();
+            },
+            child: Icon(
+              Icons.add_circle_outline,
+              color: Colors.black,
+              size: 22,
+            ),
+          ),
+          const SizedBox(width: 8,),
           Expanded(child: Container(
             height: 35,
             child: TextField(
@@ -52,7 +66,6 @@ class _BottomInputCellState extends State<BottomInputCell> {
           SizedBox(width: 10,),
           GestureDetector(
             onTap: () {
-              print(controller.text);
               context.read<ChatModel>().sendMessage(controller.text);
               controller.text = '';
             },
