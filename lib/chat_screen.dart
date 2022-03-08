@@ -1,5 +1,6 @@
 
 import 'package:all_platform_demo/chat_model.dart';
+import 'package:all_platform_demo/components/bottom_input_cell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           return false;
                         },
                         child: ListView.builder(
+                            shrinkWrap: true,
                             controller: model.scrollController,
                             itemCount: model.messageItems.length,
                             itemBuilder: (context, index) {
@@ -53,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     )
                 ),
-
+                BottomInputCell(),
               ],
             ),
           );
