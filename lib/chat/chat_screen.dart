@@ -1,5 +1,5 @@
 
-import 'package:all_platform_demo/chat_model.dart';
+import 'package:all_platform_demo/chat/chat_model.dart';
 import 'package:all_platform_demo/components/bottom_input_cell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
 
 import 'dart:io';
 
-import 'package:all_platform_demo/cmd_coder.dart';
-import 'package:all_platform_demo/device_bean.dart';
-import 'package:all_platform_demo/multicast.dart';
+import 'package:all_platform_demo/transfer/cmd_coder.dart';
+import 'package:all_platform_demo/transfer/device_bean.dart';
+import 'package:all_platform_demo/transfer/multicast.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class BroadcastManager {

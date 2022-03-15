@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:all_platform_demo/broadcast_manager.dart';
+import 'package:all_platform_demo/transfer/broadcast_manager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
