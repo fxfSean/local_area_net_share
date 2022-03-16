@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:all_platform_demo/transfer/cmd_coder.dart';
@@ -41,7 +42,8 @@ class BroadcastManager {
         bindIp = cmdBean.ip;
         _deviceStatusListener?.onBindReceive(bindIp);
         isBind = true;
-        sendData('bindSuccess', cmdBean.ip);
+        send(CmdCoder.CMD_BIND_SUCCESS, '', cmdBean.ip);
+        multicast.stopSendBroadcast();
         print('reply bindSuccess');
       }
       /// 主设备，接收反馈成功
@@ -94,6 +96,7 @@ class BroadcastManager {
   void bind(String devicesIp) {
     _deviceStatusListener?.onBindSend();
     send(CmdCoder.CMD_BIND,'',devicesIp);
+    multicast.stopSendBroadcast();
   }
 
   void _printDeviceInfo(AndroidDeviceInfo info) {
