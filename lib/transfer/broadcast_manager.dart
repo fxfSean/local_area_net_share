@@ -40,7 +40,7 @@ class BroadcastManager {
       /// 从设备，发送反馈成功给主设备
       if (cmdBean.cmdCode == CmdCoder.CMD_BIND) {
         bindIp = cmdBean.ip;
-        _deviceStatusListener?.onBindReceive(bindIp);
+        _deviceStatusListener?.onBindReceive(_getDeviceByIp(bindIp));
         isBind = true;
         send(CmdCoder.CMD_BIND_SUCCESS, '', cmdBean.ip);
         multicast.stopSendBroadcast();
@@ -48,8 +48,8 @@ class BroadcastManager {
       }
       /// 主设备，接收反馈成功
       if (cmdBean.cmdCode == CmdCoder.CMD_BIND_SUCCESS) {
-        _deviceStatusListener?.onBindSuccess(cmdBean.ip);
         bindIp = cmdBean.ip;
+        _deviceStatusListener?.onBindSuccess(_getDeviceByIp(bindIp));
         isBind = true;
         print('receive bindSuccess');
       }
@@ -77,6 +77,14 @@ class BroadcastManager {
     });
     _deviceStatusListener?.onScanning();
     multicast.startSendBroadcast(deviceName);
+  }
+
+  DeviceBean _getDeviceByIp(String ip) {
+    var list = devices.where((element) => element.ip == ip);
+    if(list.isNotEmpty) {
+      return list.first;
+    }
+    return DeviceBean('', ip);
   }
 
   void setOnDeviceStatusListener(DeviceStatusListener listener) {
@@ -136,7 +144,7 @@ class BroadcastManager {
 mixin DeviceStatusListener {
   void onScanning();
   void onBindSend();
-  void onBindReceive(String targetIp);
-  void onBindSuccess(String targetIp);
+  void onBindReceive(DeviceBean targetBean);
+  void onBindSuccess(DeviceBean targetBean);
   void onReceiveData(String data);
 }

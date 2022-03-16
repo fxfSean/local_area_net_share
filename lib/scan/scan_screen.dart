@@ -38,7 +38,7 @@ class _HomeWidgetState extends State<_HomeWidget> {
         title: Text('扫描'),
       ),
       body: ChangeNotifierProvider(
-        create: (context) => ScanModel(),
+        create: (context) => ScanModel(context),
         child: _ScanView(),
       )
     );

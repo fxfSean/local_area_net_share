@@ -1,14 +1,19 @@
 
 import 'dart:async';
 
+import 'package:all_platform_demo/chat/chat_screen.dart';
 import 'package:all_platform_demo/transfer/broadcast_manager.dart';
+import 'package:all_platform_demo/transfer/cmd_coder.dart';
+import 'package:all_platform_demo/transfer/device_bean.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ScanModel extends ChangeNotifier with DeviceStatusListener{
   BroadcastManager _broadcastManager = BroadcastManager();
-  Completer<bool>? _bindCompleter;
+  late Completer<bool> _bindCompleter;
+  final BuildContext context;
 
-  ScanModel() {
+  ScanModel(this.context) {
     _broadcastManager.addRefreshUICallback(() {
       notifyListeners();
     });
@@ -18,8 +23,10 @@ class ScanModel extends ChangeNotifier with DeviceStatusListener{
   get devices => _broadcastManager.devices;
 
   @override
-  void onBindReceive(String targetIp) {
-    // TODO: implement onBindReceive
+  void onBindReceive(DeviceBean target) {
+    Navigator.of(context).push(
+        MaterialPageRoute(builder: (ctx) => ChatScreen(deviceName: target.deviceName
+    )));
   }
 
   @override
@@ -28,8 +35,8 @@ class ScanModel extends ChangeNotifier with DeviceStatusListener{
   }
 
   @override
-  void onBindSuccess(String targetIp) {
-    _bindCompleter!.complete(true);
+  void onBindSuccess(DeviceBean targetBean) {
+    _bindCompleter.complete(true);
   }
 
   @override
@@ -50,13 +57,13 @@ class ScanModel extends ChangeNotifier with DeviceStatusListener{
     _bindCompleter = Completer<bool>();
     _broadcastManager.bind(ip);
     Timer(Duration(seconds: 5),() {
-      if(_bindCompleter!.isCompleted){
+      if(_bindCompleter.isCompleted){
         return;
       } else {
-        _bindCompleter!.complete(false);
+        _bindCompleter.complete(false);
       }
     });
-    return _bindCompleter!.future;
+    return _bindCompleter.future;
   }
 
 }
